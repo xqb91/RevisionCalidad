@@ -97,6 +97,9 @@ $(document).ready(function() {
                                             var resultados = JSON.parse(responseObject);
                                             $("#lblSaludoUser").html('Hola <strong>'+resultados.nombre_evaluador+'!</strong>');
                                             $("#mensajeUsuario").html('Por favor, elige el periodo y área para comenzar a trabajar.');
+
+                                            var infoEvaluador = resultados;
+
                                             $.ajax({
                                                     type: 'post',
                                                     url: 'core/ListAreas.php',
@@ -116,11 +119,20 @@ $(document).ready(function() {
                                                             },
                                                             200: function(responseObject, textStatus, errorThrown) {
                                                                 var resultados = JSON.parse(responseObject);
-                                                                $.each(resultados, function (index, value) {
-                                                                    //dataArray.push([value["yourID"].toString(), value["yourValue"] ]);
-                                                                    $("#slcArea").append('<option value="'+value.codigo_area+'">'+value.nombre_area+'</option>');
-                                                                    $("#slcArea").removeAttr('disabled');
-                                                                });
+                                                                if(infoEvaluador.area == 0) {
+                                                                    $.each(resultados, function (index, value) {
+                                                                        //dataArray.push([value["yourID"].toString(), value["yourValue"] ]);
+                                                                        $("#slcArea").append('<option value="'+value.codigo_area+'">'+value.nombre_area+'</option>');
+                                                                        $("#slcArea").removeAttr('disabled');
+                                                                    });
+                                                                }else{
+                                                                    $.each(resultados, function (index, value) {
+                                                                        if(infoEvaluador.area == value.codigo_area) {
+                                                                            $("#slcArea").append('<option value="'+value.codigo_area+'">'+value.nombre_area+'</option>');
+                                                                        }
+                                                                        $("#slcArea").removeAttr('disabled');
+                                                                    });
+                                                                }
 
                                                                     $.ajax({
                                                                             type: 'post',
@@ -218,7 +230,59 @@ $("#btnComenzar").click(function() {
                     $("#btnComenzar").removeAttr('disabled');
                 },
                 200: function(responseObject, textStatus, errorThrown) {
-                    window.location.href = "home.php";                    
+                    $.ajax({
+                        type: 'post',
+                        url: 'core/InfoSesionEvaluador.php',
+                        beforeSend: function() {
+                        },
+                        statusCode: {
+                            500: function(responseObject, textStatus, errorThrown) {
+                                $("#modalIndexTitle").text('Información de Evaluador');
+                                $("#modalIndexContenido").attr('align', 'left');
+                                $("#modalIndexCerrarVentana").show();
+                                $("#modalIndexContenido").html('No se ha podido recuperar la información del evaluador<br /><strong>ERROR JSON EMPTY</strong>');
+                                $("#modalIndexBtnCerrar").hide();
+                                $("#modalIndexBtnCerrar").text('Cerrar');
+                                $("#modalIndexBtnAccion").hide();
+                            },
+                            200: function(responseObject, textStatus, errorThrown) {
+                                var resultados = JSON.parse(responseObject);
+                                 $.ajax({
+                                    type: 'post',
+                                    url: 'core/indexGrantAccess.php',
+                                    data: {"grantt": resultados.admin},
+                                    beforeSend: function() {
+                                    },
+                                    statusCode: {
+                                        403: function(responseObject, textStatus, errorThrown) {
+                                            $("#modalIndexTitle").text('Error');
+                                            $("#modalIndexContenido").attr('align', 'left');
+                                            $("#modalIndexCerrarVentana").show();
+                                            $("#modalIndexContenido").html('No se pudo completar la solicitud de autenticación. Sesión destruída.<br /><strong>ERROR POST EMPTY PARAMETER CORE GRANT ACCESS</strong>');
+                                            $("#modalIndexBtnCerrar").hide();
+                                            $("#modalIndexBtnCerrar").text('Cerrar');
+                                            $("#modalIndexBtnAccion").hide();
+                                        },
+                                        200: function(responseObject, textStatus, errorThrown) {
+                                            if(resultados.supervisor == 1 && resultados.admin == 0 && resultados.estado == 1) {
+                                                window.location.href = "supervisor.php";
+                                            }else if(resultados.supervisor == 0 && resultados.admin == 1 && resultados.estado == 1) {
+                                                window.location.href = "home.php";
+                                            }else{
+                                                $("#modalIndexTitle").text('Problema al autenticar al usuario '+resultados.nombre_evaluador);
+                                                $("#modalIndexContenido").attr('align', 'left');
+                                                $("#modalIndexCerrarVentana").show();
+                                                $("#modalIndexContenido").html(resultado.nombre_evaluador+', el sistema te ha denegado el acceso ya que no posees los permisos necesarios para acceder a este módulo o bien tu usuario se encuentra desactivado. Comuniucate con los administradores del sistema.');
+                                                $("#modalIndexBtnCerrar").hide();
+                                                $("#modalIndexBtnCerrar").text('Cerrar');
+                                                $("#modalIndexBtnAccion").hide();
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });        
                 }           
             }
     });

@@ -99,7 +99,8 @@ function historialEvaluacion() {
 					cadena = cadena+'<th scope="row">'+x.fecha+'</th>';
 					cadena = cadena+'<td>'+x.status+'</td>';
 					cadena = cadena+'<td style = "text-transform:capitalize;">'+x.autorizador+'</td>';
-					cadena = cadena+'<td>'+x.detalle+'</td>';
+					var aux = $('<textarea />').html(x.detalle).text();
+					cadena = cadena+'<td>'+aux+'</td>';
 					cadena = cadena+'</tr>';
 					$("#tablaHistorial tbody").append(cadena);
 	        	});

@@ -19,19 +19,19 @@
 		//directorio base del sistema
 		define('dirbase'		, $_SERVER["DOCUMENT_ROOT"]);
 		//directorio de controladores
-		define('dirConfig'		, dirbase.'/revision/config/');
+		define('dirConfig'		, dirbase.'/revision/RevisionCalidad/config/');
 		//directorio de controladores
-		define('dirController'	, dirbase.'/revision/controller/');
+		define('dirController'	, dirbase.'/revision/RevisionCalidad/controller/');
 		//directorio de cores
-		define('dirCore'		, dirbase.'/revision/core/');
+		define('dirCore'		, dirbase.'/revision/RevisionCalidad/core/');
 		//directorio de fachada
-		define('dirFacade'		, dirbase.'/revision/facade/');
+		define('dirFacade'		, dirbase.'/revision/RevisionCalidad/facade/');
 		//directorio de frameworks utilizados
-		define('dirFramework'	, dirbase.'/revision/framework/');
+		define('dirFramework'	, dirbase.'/revision/RevisionCalidad/framework/');
 		//direcotiors de modelos de la base de datos
-		define('dirModel'		, dirbase.'/revision/model/');
+		define('dirModel'		, dirbase.'/revision/RevisionCalidad/model/');
 		//directorio del transaccional
-		define('dirTransaction'	, dirbase.'/revision/transaction/');
+		define('dirTransaction'	, dirbase.'/revision/RevisionCalidad/transaction/');
 		//directorio de attachments
 		define('dirFileAttachments'	, dirbase.'/calidad/files/attachments/');
 		//directorio de audios

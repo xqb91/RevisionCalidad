@@ -2,7 +2,7 @@
 	include("../config/Globales.php");
 	include("../config/basicos.php");
 	include(dirController."CustomController.php");
-	session_start();
+	//session_start();
 	
 	$e  = new CustomController();
 
@@ -26,8 +26,7 @@
 				echo '"fecha" : "'.$temp['fecha'].'", ';
 				echo '"status" : "'.$temp['status'].'", ';
 				echo '"autorizador" : "'.$temp['nombre_autorizador'].'", ';
-				$observacion = str_replace('"', '--', $temp['detalle']);
-				echo '"detalle" : "'.$observacion.'" ';
+				echo '"detalle" : '.json_encode($temp['detalle']).' ';
 				echo '}';
 
 				if($i<count($historial)-1) {echo ",";}

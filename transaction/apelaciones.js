@@ -125,12 +125,12 @@ $("#btnRechazarApelacion").click(function() {
 });
 
 $("#btnEjecutarProceso").click(function() {
-	if($("#btnEjecutarProceso").text() == 'Aceptar') {
+	if($("#btnEjecutarProceso").text() == 'Enviar Apelación') {
 		var evaluacion = $("#btnEjecutarProceso").attr('evaluacion');
 		var tipo = $("#btnEjecutarProceso").attr('tipo_evaluacion');
 		$.ajax({
 		    type: 'post',
-		    url: 'core/ChangeStatus.php',
+		    url: 'core/EnviarApelacion.php',
 		    data: {"evaluacion" : evaluacion, "tipo" : tipo, "comentario" : quill.root.innerHTML, "nuevoestado" : "aceptada"},
 		    statusCode: {
 		        505: function(responseObject, textStatus, jqXHR) {
@@ -160,107 +160,14 @@ $("#btnEjecutarProceso").click(function() {
 		        201: function(responseObject, textStatus, errorThrown) {
 					alert('Imposible actualizar el estado de la evaluación. Se rechaza la solicitud. La evaluación '+evaluacion+' mantendrá su estado actual sin embargo, se ha registrado en el historial de cambios. Favor informe a equipo TRICOT MIS para actualización manual. Adjunte este error.');
 		        },
-		        200: function(responseObject, textStatus, errorThrown) {	
-		        	$("#lblTextArea").hide();
-					$("div.ql-toolbar.ql-snow").hide();
-					$("#btnEjecutarProceso").hide();
-					$("#btnAprobarApelacion").hide();
-					$("#btnRechazarApelacion").hide();
-					$("#entrarAProceso").hide();
-					$("div.custom-control.custom-switch").html(responseObject);
-		        }
-		    }
-		});
-	}else if($("#btnEjecutarProceso").text() == 'Rechazar') {
-		var evaluacion = $("#btnEjecutarProceso").attr('evaluacion');
-		var tipo = $("#btnEjecutarProceso").attr('tipo_evaluacion');
-		$.ajax({
-		    type: 'post',
-		    url: 'core/ChangeStatus.php',
-		    data: {"evaluacion" : evaluacion, "tipo" : tipo, "comentario" : quill.root.innerHTML, "nuevoestado" : "rechazado"},
-		    statusCode: {
-		       505: function(responseObject, textStatus, jqXHR) {
-		            alert('Ocurrió un error ya que no se recibió un parámetro [HTTP 505]');
-		        },
-		        504: function(responseObject, textStatus, jqXHR) {
-		            alert('Ocurrió un error ya que no se recibió un parámetro [HTTP 504]');
-		        },
-		        503: function(responseObject, textStatus, jqXHR) {
-		            alert('Ocurrió un error ya que no se recibió un parámetro [HTTP 503]');
-		        },
-		        502: function(responseObject, textStatus, jqXHR) {
-		            alert('Ocurrió un error ya que no se recibió un parámetro [HTTP 502]');
-		        },
-		        501: function(responseObject, textStatus, jqXHR) {
-		            alert('Ocurrió un error ya que no se recibió un parámetro [HTTP 501]');
-		        },
-		        500: function(responseObject, textStatus, errorThrown) {
-		            alert('El tipo de evaluacion '+tipo+' es invalido y se ha rechazado la petición. [HTTP 500]');
-		        },
-		        401: function(responseObject, textStatus, errorThrown) {
-					alert('La evaluación '+evaluacion+' no fue encontrada en la base de datos. Imposible proceder');
-		        },
-		        202: function(responseObject, textStatus, errorThrown) {
-					alert('Imposible registrar el evento de cammbio de estado de la evaluación. Se rechaza la solicitud. La evaluación '+evaluacion+' mantendrá su estado actual.');
-		        },
-		        201: function(responseObject, textStatus, errorThrown) {
-					alert('Imposible actualizar el estado de la evaluación. Se rechaza la solicitud. La evaluación '+evaluacion+' mantendrá su estado actual sin embargo, se ha registrado en el historial de cambios. Favor informe a equipo TRICOT MIS para actualización manual. Adjunte este error.');
-		        },
 		        200: function(responseObject, textStatus, errorThrown) {
-		        	$("#lblTextArea").hide();
-					$("div.ql-toolbar.ql-snow").hide();
-					$("#btnEjecutarProceso").hide();
-					$("#entrarAProceso").hide();
-					$("#btnAprobarApelacion").hide();
-					$("#btnRechazarApelacion").hide();
-					$("div.custom-control.custom-switch").html(responseObject);
-					detallesEvaluacion();
-		        }
-		    }
-		});
-	}else if($("#btnEjecutarProceso").text() == 'Enviar a Revisión') {
-		var evaluacion = $("#btnEjecutarProceso").attr('evaluacion');
-		var tipo = $("#btnEjecutarProceso").attr('tipo_evaluacion');
-		$.ajax({
-		    type: 'post',
-		    url: 'core/ChangeStatus.php',
-		    data: {"evaluacion" : evaluacion, "tipo" : tipo, "comentario" : quill.root.innerHTML, "nuevoestado" : "vacio"},
-		    statusCode: {
-		        505: function(responseObject, textStatus, jqXHR) {
-		            alert('Ocurrió un error ya que no se recibió un parámetro [HTTP 505]');
-		        },
-		        504: function(responseObject, textStatus, jqXHR) {
-		            alert('Ocurrió un error ya que no se recibió un parámetro [HTTP 504]');
-		        },
-		        503: function(responseObject, textStatus, jqXHR) {
-		            alert('Ocurrió un error ya que no se recibió un parámetro [HTTP 503]');
-		        },
-		        502: function(responseObject, textStatus, jqXHR) {
-		            alert('Ocurrió un error ya que no se recibió un parámetro [HTTP 502]');
-		        },
-		        501: function(responseObject, textStatus, jqXHR) {
-		            alert('Ocurrió un error ya que no se recibió un parámetro [HTTP 501]');
-		        },
-		        500: function(responseObject, textStatus, errorThrown) {
-		            alert('El tipo de evaluacion '+tipo+' es invalido y se ha rechazado la petición. [HTTP 500]');
-		        },
-		        401: function(responseObject, textStatus, errorThrown) {
-					alert('La evaluación '+evaluacion+' no fue encontrada en la base de datos. Imposible proceder');
-		        },
-		        202: function(responseObject, textStatus, errorThrown) {
-					alert('Imposible registrar el evento de cammbio de estado de la evaluación. Se rechaza la solicitud. La evaluación '+evaluacion+' mantendrá su estado actual.');
-		        },
-		        201: function(responseObject, textStatus, errorThrown) {
-					alert('Imposible actualizar el estado de la evaluación. Se rechaza la solicitud. La evaluación '+evaluacion+' mantendrá su estado actual sin embargo, se ha registrado en el historial de cambios. Favor informe a equipo TRICOT MIS para actualización manual. Adjunte este error.');
-		        },
-		        200: function(responseObject, textStatus, errorThrown) {
+		        	//ini
+		        	$("div.ql-toolbar.ql-snow").hide();
 					$("#lblTextArea").hide();
-					$("div.ql-toolbar.ql-snow").hide();
 					$("#btnEjecutarProceso").hide();
 					$("#entrarAProceso").hide();
-					$("#btnAprobarApelacion").hide();
-					$("#btnRechazarApelacion").hide();
 					$("div.custom-control.custom-switch").html(responseObject);
+					//end
 					detallesEvaluacion();
 		        }
 		    }
@@ -444,18 +351,18 @@ function recuperaPDF() {
 		case "1":
 			//evaluacion parcial
 			//../calidad/core/pdfGenerate.php?evaluacion="+evaluacion+"&tipo=parcial&accion=descargar
-			$("#pdfViewer").html('<iframe src="../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=parcial" width="100%" height="350" />');
+			$("#pdfViewer").html('<iframe src="../../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=parcial" width="100%" height="350" />');
 			//recuperarAudio();
 		break;
 		
 		case "2":
 			//quincenal
-			$("#pdfViewer").html('<iframe src="../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=quincenal" width="100%" height="350" />');
+			$("#pdfViewer").html('<iframe src="../../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=quincenal" width="100%" height="350" />');
 		break;
 
 		case "3":
 			//final
-			$("#pdfViewer").html('<iframe src="../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=final" width="100%" height="600" />');
+			$("#pdfViewer").html('<iframe src="../../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=final" width="100%" height="600" />');
 		break;
 	}
 }
@@ -468,17 +375,17 @@ function downloadPDF() {
 	switch(tipo) {
 		case "1":
 			//evaluacion parcial
-			window.location.href="../calidad/core/pdfGenerate.php?evaluacion="+evaluacion+"&tipo=parcial&accion=descargar";
+			window.location.href="../../calidad/core/pdfGenerate.php?evaluacion="+evaluacion+"&tipo=parcial&accion=descargar";
 		break;
 		
 		case "2":
 			//quincenal
-			window.location.href="../calidad/core/pdfGenerate.php?evaluacion="+evaluacion+"&tipo=quincenal&accion=descargar";
+			window.location.href="../../calidad/core/pdfGenerate.php?evaluacion="+evaluacion+"&tipo=quincenal&accion=descargar";
 		break;
 
 		case "3":
 			//final
-			window.location.href="../calidad/core/pdfGenerate.php?evaluacion="+evaluacion+"&tipo=final&accion=descargar";
+			window.location.href="../../calidad/core/pdfGenerate.php?evaluacion="+evaluacion+"&tipo=final&accion=descargar";
 		break;
 	}
 }
@@ -574,8 +481,8 @@ function detallesEvaluacion() {
 		        			$("#entrarAProceso").show();
 							$("#entrarAProcesoLabel").show();
 		        			$("#txtEstadoEvaluacion").val('1: Generada');
-		        			$("#entrarAProcesoLabel").html('<strong>Enviar a revisión</strong>');
-		        			$("#btnEjecutarProceso").html('Enviar a Revisión');
+		        			$("#entrarAProcesoLabel").html('<strong>Apelar esta evaluación</strong>');
+		        			$("#btnEjecutarProceso").html('Enviar Apelación');
 		        			$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
 							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
@@ -588,8 +495,8 @@ function detallesEvaluacion() {
 
 		        		case 4:
 		        			$("#txtEstadoEvaluacion").val('4: Corregida');
-		        			$("#entrarAProcesoLabel").html('<strong>Enviar a revisión</strong>');
-		        			$("#btnEjecutarProceso").html('Enviar a Revisión');
+		        			$("#entrarAProcesoLabel").html('<strong>Apelar esta evaluación</strong>');
+		        			$("#btnEjecutarProceso").html('Enviar Apelación');
 		        			$("#entrarAProceso").show();
 							$("#entrarAProcesoLabel").show();
 							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
@@ -598,10 +505,8 @@ function detallesEvaluacion() {
 
 		        		case 5:
 		        			$("#txtEstadoEvaluacion").val('5: Disponible');
-		        			$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
-							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
-							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
+		        			$("#entrarAProceso").show();
+							$("#entrarAProcesoLabel").show();
 		        		break;
 
 		        		case 6:
@@ -610,39 +515,33 @@ function detallesEvaluacion() {
 		        			$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
 							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 							$("#headingFive").show();
-							$("#btnAprobarApelacion").show();
-							$("#btnRechazarApelacion").show();
+							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
+							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 
 		        		case 7:
 		        			$("#txtEstadoEvaluacion").val('7: Apelación Aceptada');
-		        			$("#btnEjecutarProceso").html('Rechazar Apelación');
+		        			cargarMotivoApelacion();
+		        			$("#headingFive").hide();
+		        			$("#btnEjecutarProceso").hide();
 		        			$("div.ql-toolbar.ql-snow").hide();
 							$("#btnEjecutarProceso").hide();
-							$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
 							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
 							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 
 		        		case 8:
 		        			$("#txtEstadoEvaluacion").val('8: Apelación Terminada');
-		        			$("div.ql-toolbar.ql-snow").hide();
-							$("#btnEjecutarProceso").hide();
-							$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
+		        			$("#entrarAProcesoLabel").html('<strong>Re-Apelar Evaluación</strong>');
+		        			$("#btnEjecutarProceso").html('Enviar Apelación');
+		        			$("#entrarAProceso").show();
+							$("#entrarAProcesoLabel").show();
 							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
 							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 
 		        		case 9:
 		        			$("#txtEstadoEvaluacion").val('9: Conformidad');
-		        			$("div.ql-toolbar.ql-snow").hide();
-							$("#btnEjecutarProceso").hide();
-							$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
-							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
-							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 		        	}
 
@@ -675,8 +574,8 @@ function detallesEvaluacion() {
 		        			$("#entrarAProceso").show();
 							$("#entrarAProcesoLabel").show();
 		        			$("#txtEstadoEvaluacion").val('1: Generada');
-		        			$("#entrarAProcesoLabel").html('<strong>Enviar a revisión</strong>');
-		        			$("#btnEjecutarProceso").html('Enviar a Revisión');
+		        			$("#entrarAProcesoLabel").html('<strong>Apelar esta evaluación</strong>');
+		        			$("#btnEjecutarProceso").html('Enviar Apelación');
 		        			$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
 							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
@@ -689,59 +588,45 @@ function detallesEvaluacion() {
 
 		        		case 4:
 		        			$("#txtEstadoEvaluacion").val('4: Corregida');
-		        			$("#entrarAProcesoLabel").html('<strong>Enviar a revisión</strong>');
-		        			$("#btnEjecutarProceso").html('Enviar a Revisión');
+		        			$("#entrarAProcesoLabel").html('<strong>Apelar esta evaluación</strong>');
+		        			$("#btnEjecutarProceso").html('Enviar Apelación');
 		        			$("#entrarAProceso").show();
 							$("#entrarAProcesoLabel").show();
-							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
-							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 
 		        		case 5:
 		        			$("#txtEstadoEvaluacion").val('5: Disponible');
 		        			$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
+							$("#entrarAProcesoLabel").show();
+							$("#entrarAProcesoLabel").html('<strong>Apelar esta evaluación</strong>');
+		        			$("#btnEjecutarProceso").html('Enviar Apelación');
 		        		break;
 
 		        		case 6:
 		        			cargarMotivoApelacion();
 		        			$("#txtEstadoEvaluacion").val('6: Apelada');
 							$("#headingFive").show();
-							$("#btnAprobarApelacion").show();
-							$("#btnRechazarApelacion").show();
 							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
 							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 
 		        		case 7:
 		        			$("#txtEstadoEvaluacion").val('7: Apelación Aceptada');
-		        			$("#btnEjecutarProceso").html('Rechazar Apelación');
+		        			cargarMotivoApelacion();
+		        			$("#headingFive").hide();
+		        			$("#btnEjecutarProceso").hide();
 		        			$("div.ql-toolbar.ql-snow").hide();
 							$("#btnEjecutarProceso").hide();
-							$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
 							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
 							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 
 		        		case 8:
 		        			$("#txtEstadoEvaluacion").val('8: Apelación Terminada');
-		        			$("div.ql-toolbar.ql-snow").hide();
-							$("#btnEjecutarProceso").hide();
-							$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
-							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
-							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 
 		        		case 9:
 		        			$("#txtEstadoEvaluacion").val('9: Conformidad');
-		        			$("div.ql-toolbar.ql-snow").hide();
-							$("#btnEjecutarProceso").hide();
-							$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
-							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
-							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 		        	}
 
@@ -772,10 +657,10 @@ function detallesEvaluacion() {
 		        	switch(respuesta.estado) {
 		        		case 1:
 		        			$("#entrarAProceso").show();
-							$("#entrarAProcesoLabel").show();
 		        			$("#txtEstadoEvaluacion").val('1: Generada');
-		        			$("#entrarAProcesoLabel").html('<strong>Enviar a revisión</strong>');
-		        			$("#btnEjecutarProceso").html('Enviar a Revisión');
+		        			$("#entrarAProcesoLabel").show();
+							$("#entrarAProcesoLabel").html('<strong>Apelar esta evaluación</strong>');
+		        			$("#btnEjecutarProceso").html('Enviar Apelación');
 		        			$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
 							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
@@ -788,18 +673,20 @@ function detallesEvaluacion() {
 
 		        		case 4:
 		        			$("#txtEstadoEvaluacion").val('4: Corregida');
-		        			$("#entrarAProcesoLabel").html('<strong>Enviar a revisión</strong>');
-		        			$("#btnEjecutarProceso").html('Enviar a Revisión');
+							$("#entrarAProcesoLabel").show();
+							$("#entrarAProcesoLabel").html('<strong>Apelar esta evaluación</strong>');
+		        			$("#btnEjecutarProceso").html('Enviar Apelación');
 		        			$("#entrarAProceso").show();
 							$("#entrarAProcesoLabel").show();
-							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
-							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 
 		        		case 5:
 		        			$("#txtEstadoEvaluacion").val('5: Disponible');
-		        			$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
+		        			$("#entrarAProceso").show();
+							$("#entrarAProcesoLabel").show();
+							$("#entrarAProcesoLabel").show();
+							$("#entrarAProcesoLabel").html('<strong>Apelar esta evaluación</strong>');
+		        			$("#btnEjecutarProceso").html('Enviar Apelación');
 		        		break;
 
 		        		case 6:
@@ -808,39 +695,25 @@ function detallesEvaluacion() {
 		        			$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
 							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 							$("#headingFive").show();
-							$("#btnAprobarApelacion").show();
-							$("#btnRechazarApelacion").show();
 		        		break;
 
 		        		case 7:
 		        			$("#txtEstadoEvaluacion").val('7: Apelación Aceptada');
-		        			$("#btnEjecutarProceso").html('Rechazar Apelación');
+		        			cargarMotivoApelacion();
+		        			$("#headingFive").hide();
+		        			$("#btnEjecutarProceso").hide();
 		        			$("div.ql-toolbar.ql-snow").hide();
 							$("#btnEjecutarProceso").hide();
-							$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
 							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
 							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 
 		        		case 8:
 		        			$("#txtEstadoEvaluacion").val('8: Apelación Terminada');
-		        			$("div.ql-toolbar.ql-snow").hide();
-							$("#btnEjecutarProceso").hide();
-							$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
-							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
-							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 
 		        		case 9:
 		        			$("#txtEstadoEvaluacion").val('9: Conformidad');
-		        			$("div.ql-toolbar.ql-snow").hide();
-							$("#btnEjecutarProceso").hide();
-							$("#entrarAProceso").hide();
-							$("#entrarAProcesoLabel").hide();
-							$("#btnEjecutarProceso").attr('evaluacion', evaluacion);
-							$("#btnEjecutarProceso").attr('tipo_evaluacion', tipo);
 		        		break;
 		        	}
 

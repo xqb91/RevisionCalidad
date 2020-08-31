@@ -6,9 +6,9 @@
 	sleep(1);
 	try {
 		$c = new CustomController();
-		$v = $c->evaluacionesApeladas();
+		$v = $c->evaluacionesNotificadasSupervisor();
 		if($v == null) {
-			echo "{}";
+			http_response_code(401);
 		}else{
 			echo "["; 
 			for($i=0; $i<count($v); $i++) {

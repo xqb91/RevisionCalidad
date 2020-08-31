@@ -13,7 +13,7 @@
 		if($obj == null) {
 			http_response_code(501);
 		}else{
-			$obj = $obj[0];
+			$obj = $obj[count($obj)-1];
 			echo html_entity_decode($obj->getobservacion(), ENT_QUOTES, 'UTF-8');
 		}	
 	}

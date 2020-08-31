@@ -31,7 +31,7 @@
     header('Location: index.php');
     exit;
   }else{
-    if($_SESSION['current_access'] != 1) {
+    if($_SESSION['current_access'] == 1) {
       header('Location: logout.php');
       exit;
     }
@@ -143,16 +143,16 @@
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 
-                <span class="badge badge-secondary"><i class="fas fa-tired"></i> Apelaciones</span>
+                <span class="badge badge-secondary"><i class="fas fa-inbox"></i> Notificaciones</span>
                 <!-- Counter - Alerts -->
                 <span class="badge badge-danger badge-counter" id="lblApelacionesCounter">0</span>
               </a>
               <!-- Dropdown - Alerts -->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
-                  <i class="fas fa-tired"></i> Centro de Apelaciones
+                  <i class="fas fa-inbox"></i> Centro de Notificaciones
                 </h6>
-                  <p id="lblCentroApelaciones"></p>
+                  <p id="lblNotificacionesList"></p>
               </div>
             </li>
 
@@ -169,10 +169,6 @@
                 <a class="dropdown-item" href="logout.php">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Salir
-                </a>
-                <a class="dropdown-item" href="../calidad/home.php">
-                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Abrir módulo de evaluaciones
                 </a>
               </div>
             </li>
@@ -200,11 +196,11 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">En Proceso</div>
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ejecutivos Pendientes</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800" id="lblTotalEnProceso"><img src="facade/img/loading2.gif"></div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-hourglass-half"></i>
+                      <i class="fas fa-user-friends"></i>
                     </div>
                   </div>
                 </div>
@@ -217,11 +213,11 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">En Revisión</div>
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Evaluaciones Disponibles</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800" id="lblTotalEnRevision"><img src="facade/img/loading2.gif"></div>
                     </div>
                     <div class="col-auto">
-                      <i class="far fa-eye"></i>
+                      <i class="fas fa-book-reader"></i>
                     </div>
                   </div>
                 </div>
@@ -233,7 +229,7 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Corregidas</div>
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Apelaciones Aceptadas</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800" id="lblTotalCorregidas"><img src="facade/img/loading2.gif"></div>
                     </div>
                     <div class="col-auto">
@@ -245,15 +241,15 @@
             </div>
 
             <div class="col-xl-2 col-md-6 mb-4">
-              <div class="card border-left-danger shadow h-100 py-2">
+              <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Apeladas</div>
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Apelaciones Terminadas</div>
                       <div class="h5 mb-0 font-weight-bold text-gray-800" id="lblTotalApeladas"><img src="facade/img/loading2.gif"></div>
                     </div>
                     <div class="col-auto">
-                     <i class="fas fa-tired"></i>
+                     <i class="fas fa-check-double"></i>
                     </div>
                   </div>
                 </div>
@@ -294,12 +290,6 @@
             <form class="form-inline">
               <div class="input-group mb-3 input-group-sm">
                 <div class="input-group-prepend">
-                  <label class="input-group-text" for="slcEvaluador">Evaluador</label>
-                </div>
-                <select class="custom-select" id="slcEvaluador">
-                  <option value="*">Todos</option>
-                </select>
-                <div class="input-group-prepend">
                   <label class="input-group-text" for="slcEjecutivo">Ejecutivo</label>
                 </div>
                 <select class="custom-select" id="slcEjecutivo">
@@ -310,9 +300,6 @@
                 </div>
                 <select class="custom-select" id="slcEstado">
                   <option value="*">Cualquiera</option>
-                  <option value="1">Generada</option>
-                  <option value="2">En Revisión</option>
-                  <option value="4">Corregida</option>
                   <option value="5">Disponible</option>
                   <option value="6">Apelada</option>
                   <option value="7">Apelación Aceptada</option>
@@ -331,6 +318,12 @@
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary" id="lblTitleTablaDetalle">Detalle de Evaluaciones</h6>
+                  <div class="dropdown no-arrow">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                      <button type="button" id="btnAprobar" class="btn btn-primary btn-sm"><i class="fas fa-vote-yea"></i> <strong>Aprobar Evaluaciones</strong></button>
+                      <button type="button" id="btnDescargaMasiva" class="btn btn-success"><i class="fas fa-file-excel"></i> Descargar en Excel</button>
+                    </div>
+                  </div>
                 </div>
                 <!-- Card Body -->
                 <table class="table table-hover table-sm" id="tablaEvaluaciones">
@@ -415,8 +408,9 @@
   <script src="facade/vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="facade/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-  <script src="transaction/homeTransaction.js"></script>
+  <script src="transaction/supervisorTransaction.js"></script>
   <script src="framework/play-sound/jquery.playSound.js"></script>
+  <script src="transaction/notificacionTransaction.js"></script>
 
 </body>
 

@@ -46,18 +46,18 @@ function recuperaPDF() {
 		case "1":
 			//evaluacion parcial
 			//../calidad/core/pdfGenerate.php?evaluacion="+evaluacion+"&tipo=parcial&accion=descargar
-			$("#pdfViewer").html('<iframe src="../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=parcial" width="100%" height="350" />');
+			$("#pdfViewer").html('<iframe src="../../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=parcial" width="100%" height="350" />');
 			//recuperarAudio();
 		break;
 		
 		case "2":
 			//quincenal
-			$("#pdfViewer").html('<iframe src="../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=quincenal" width="100%" height="350" />');
+			$("#pdfViewer").html('<iframe src="../../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=quincenal" width="100%" height="350" />');
 		break;
 
 		case "3":
 			//final
-			$("#pdfViewer").html('<iframe src="../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=final" width="100%" height="600" />');
+			$("#pdfViewer").html('<iframe src="../../calidad/core/pdfGenerate.php?evaluacion='+evaluacion+'&tipo=final" width="100%" height="600" />');
 		break;
 	}
 }

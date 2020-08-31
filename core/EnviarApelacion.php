@@ -30,13 +30,13 @@
 									http_response_code(401);
 								}else{
 									$tempeva = $tempeva[0];
-									if($tempeva->getEstado() == 1) {
-										$tempeva->setEstado(2);
+									if($tempeva->getEstado() == 1 || $tempeva->getEstado() == 4 || $tempeva->getEstado() == 5) {
+										$tempeva->setEstado(6);
 
 										$array['id']					= 0;
 										$array['tipo']					= 1;
 										$array['numero_evaluacion']		= $evaluacion;
-										$array['estado']				= 2;
+										$array['estado']				= 6;
 										$array['usuario']				= $usuario->getrut_evaluador();
 										$array['observacion']			= $comentario;
 
@@ -44,77 +44,33 @@
 										if($ctrlRevisiones->ingresar($nuevo) == true) {
 											if($ctrlParcial->actualizar($tempeva)) {
 												http_response_code(200);
-												echo 'Evaluación enviada a revisión';
+												echo 'Apelación enviada';
 											}else{
 												http_response_code(201);
 											}
 										}else{
 											http_response_code(202);
 										}
-									}else if($tempeva->getEstado() == 4) {
-										$tempeva->setEstado(2);
+									}else if($tempeva->getEstado() == 8){
+										$tempeva->setEstado(6);
 
 										$array['id']					= 0;
 										$array['tipo']					= 1;
 										$array['numero_evaluacion']		= $evaluacion;
-										$array['estado']				= 2;
+										$array['estado']				= 6;
 										$array['usuario']				= $usuario->getrut_evaluador();
-										$array['observacion']			= "Re-Revisión: ".$comentario;
+										$array['observacion']			= "REAPELACIÓN: ".$comentario;
 
 										$nuevo = new RevEvaluacionStatus($array);
 										if($ctrlRevisiones->ingresar($nuevo) == true) {
 											if($ctrlParcial->actualizar($tempeva)) {
 												http_response_code(200);
-												echo 'Evaluación Re-enviada a revisión';
+												echo 'Re-Apelación enviada';
 											}else{
 												http_response_code(201);
 											}
 										}else{
 											http_response_code(202);
-										}
-									}else if($tempeva->getEstado() == 6){
-										if($nuevoestado == 'aceptada') {
-											$tempeva->setEstado(7);
-
-											$array['id']					= 0;
-											$array['tipo']					= 1;
-											$array['numero_evaluacion']		= $evaluacion;
-											$array['estado']				= 7;
-											$array['usuario']				= $usuario->getrut_evaluador();
-											$array['observacion']			= $comentario;
-
-											$nuevo = new RevEvaluacionStatus($array);
-											if($ctrlRevisiones->ingresar($nuevo) == true) {
-												if($ctrlParcial->actualizar($tempeva)) {
-													http_response_code(200);
-													echo 'Apelación aceptada';
-												}else{
-													http_response_code(201);
-												}
-											}else{
-												http_response_code(202);
-											}
-										}else{
-											$tempeva->setEstado(8);
-
-											$array['id']					= 0;
-											$array['tipo']					= 1;
-											$array['numero_evaluacion']		= $evaluacion;
-											$array['estado']				= 8;
-											$array['usuario']				= $usuario->getrut_evaluador();
-											$array['observacion']			= $comentario;
-
-											$nuevo = new RevEvaluacionStatus($array);
-											if($ctrlRevisiones->ingresar($nuevo) == true) {
-												if($ctrlParcial->actualizar($tempeva)) {
-													http_response_code(200);
-													echo 'Apelación rechazada';
-												}else{
-													http_response_code(201);
-												}
-											}else{
-												http_response_code(202);
-											}
 										}
 									}
 								}
@@ -128,8 +84,8 @@
 									http_response_code(401);
 								}else{
 									$tempeva = $tempeva[0];
-									if($tempeva->getEstado() == 1) {
-										$tempeva->setEstado(2);
+									if($tempeva->getEstado() == 1 || $tempeva->getEstado() == 4 || $tempeva->getEstado() == 5) {
+										$tempeva->setEstado(6);
 
 										$array['id']					= 0;
 										$array['tipo']					= 1;
@@ -142,56 +98,33 @@
 										if($ctrlRevisiones->ingresar($nuevo) == true) {
 											if($ctrlQuincenal->actualizar($tempeva)) {
 												http_response_code(200);
-												echo 'Evaluación enviada a revisión';
+												echo 'Apelación Enviada';
 											}else{
 												http_response_code(201);
 											}
 										}else{
 											http_response_code(202);
 										}
-									}else if($tempeva->getEstado() == 6){
-										if($nuevoestado == 'aceptada') {
-											$tempeva->setEstado(7);
+									}else if($tempeva->getEstado() == 8){
+										$tempeva->setEstado(6);
 
-											$array['id']					= 0;
-											$array['tipo']					= 1;
-											$array['numero_evaluacion']		= $evaluacion;
-											$array['estado']				= 7;
-											$array['usuario']				= $usuario->getrut_evaluador();
-											$array['observacion']			= $comentario;
+										$array['id']					= 0;
+										$array['tipo']					= 1;
+										$array['numero_evaluacion']		= $evaluacion;
+										$array['estado']				= 6;
+										$array['usuario']				= $usuario->getrut_evaluador();
+										$array['observacion']			= "REAPELACIÓN: ".$comentario;
 
-											$nuevo = new RevEvaluacionStatus($array);
-											if($ctrlRevisiones->ingresar($nuevo) == true) {
-												if($ctrlQuincenal->actualizar($tempeva)) {
-													http_response_code(200);
-													echo 'Apelación aceptada';
-												}else{
-													http_response_code(201);
-												}
+										$nuevo = new RevEvaluacionStatus($array);
+										if($ctrlRevisiones->ingresar($nuevo) == true) {
+											if($ctrlQuincenal->actualizar($tempeva)) {
+												http_response_code(200);
+												echo 'Re-Apelación enviada';
 											}else{
-												http_response_code(202);
+												http_response_code(201);
 											}
 										}else{
-											$tempeva->setEstado(8);
-
-											$array['id']					= 0;
-											$array['tipo']					= 1;
-											$array['numero_evaluacion']		= $evaluacion;
-											$array['estado']				= 8;
-											$array['usuario']				= $usuario->getrut_evaluador();
-											$array['observacion']			= $comentario;
-
-											$nuevo = new RevEvaluacionStatus($array);
-											if($ctrlRevisiones->ingresar($nuevo) == true) {
-												if($ctrlQuincenal->actualizar($tempeva)) {
-													http_response_code(200);
-													echo 'Apelación rechazada';
-												}else{
-													http_response_code(201);
-												}
-											}else{
-												http_response_code(202);
-											}
+											http_response_code(202);
 										}
 									}
 								}
@@ -205,13 +138,13 @@
 									http_response_code(401);
 								}else{
 									$tempeva = $tempeva[0];
-									if($tempeva->getEstado() == 1) {
-										$tempeva->setEstado(2);
+									if($tempeva->getEstado() == 1 || $tempeva->getEstado() == 4 || $tempeva->getEstado() == 5) {
+										$tempeva->setEstado(6);
 
 										$array['id']					= 0;
 										$array['tipo']					= 1;
 										$array['numero_evaluacion']		= $evaluacion;
-										$array['estado']				= 2;
+										$array['estado']				= 6;
 										$array['usuario']				= $usuario->getrut_evaluador();
 										$array['observacion']			= $comentario;
 
@@ -219,56 +152,33 @@
 										if($ctrlRevisiones->ingresar($nuevo) == true) {
 											if($ctrlFinal->actualizar($tempeva)) {
 												http_response_code(200);
-												echo 'Evaluación enviada a revisión';
+												echo 'Apelación Enviada';
 											}else{
 												http_response_code(201);
 											}
 										}else{
 											http_response_code(202);
 										}
-									}else if($tempeva->getEstado() == 6){
-										if($nuevoestado == 'aceptada') {
-											$tempeva->setEstado(7);
+									}else if($tempeva->getEstado() == 8){
+										$tempeva->setEstado(6);
 
-											$array['id']					= 0;
-											$array['tipo']					= 1;
-											$array['numero_evaluacion']		= $evaluacion;
-											$array['estado']				= 7;
-											$array['usuario']				= $usuario->getrut_evaluador();
-											$array['observacion']			= $comentario;
+										$array['id']					= 0;
+										$array['tipo']					= 1;
+										$array['numero_evaluacion']		= $evaluacion;
+										$array['estado']				= 6;
+										$array['usuario']				= $usuario->getrut_evaluador();
+										$array['observacion']			= "REAPELACIÓN: ".$comentario;
 
-											$nuevo = new RevEvaluacionStatus($array);
-											if($ctrlRevisiones->ingresar($nuevo) == true) {
-												if($ctrlFinal->actualizar($tempeva)) {
-													http_response_code(200);
-													echo 'Apelación aceptada';
-												}else{
-													http_response_code(201);
-												}
+										$nuevo = new RevEvaluacionStatus($array);
+										if($ctrlRevisiones->ingresar($nuevo) == true) {
+											if($ctrlFinal->actualizar($tempeva)) {
+												http_response_code(200);
+												echo 'Re-Apelación enviada';
 											}else{
-												http_response_code(202);
+												http_response_code(201);
 											}
 										}else{
-											$tempeva->setEstado(8);
-
-											$array['id']					= 0;
-											$array['tipo']					= 1;
-											$array['numero_evaluacion']		= $evaluacion;
-											$array['estado']				= 8;
-											$array['usuario']				= $usuario->getrut_evaluador();
-											$array['observacion']			= $comentario;
-
-											$nuevo = new RevEvaluacionStatus($array);
-											if($ctrlRevisiones->ingresar($nuevo) == true) {
-												if($ctrlFinal->actualizar($tempeva)) {
-													http_response_code(200);
-													echo 'Apelación rechazada';
-												}else{
-													http_response_code(201);
-												}
-											}else{
-												http_response_code(202);
-											}
+											http_response_code(202);
 										}
 									}
 								}
