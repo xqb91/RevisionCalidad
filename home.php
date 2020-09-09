@@ -2,33 +2,33 @@
   include("model/Evaluador.php");
   session_start();
   if(!isset($_SESSION['rauliUser'] )) {
-    header('Location: index.php');
+    header('Location: logout.php');
     exit;
   }
   if(!isset($_SESSION['lastActivity'] )) {
-    header('Location: index.php');
+    header('Location: logout.php');
     exit;
   }
 
   if(!isset($_SESSION['current_area_work'])) {
-    header('Location: index.php');
+    header('Location: logout.php');
     exit;
   }
 
   if(!isset($_SESSION['current_periodo_work'])) {
-    header('Location: index.php');
+    header('Location: logout.php');
     exit;
   }
 
   if(!isset($_SESSION['loginUser'])) {
-      header('Location: index.php');
+      header('Location: logout.php');
       exit;
   }else{
     $evaluador = $_SESSION['loginUser'];
   }
 
   if(!isset($_SESSION['current_access'])) {
-    header('Location: index.php');
+    header('Location: logout.php');
     exit;
   }else{
     if($_SESSION['current_access'] != 1) {

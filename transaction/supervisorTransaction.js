@@ -626,6 +626,7 @@ function refrescarTabla() {
 								}else if(auxCountQuincenal == 1 && !$("#btnAprobar").is('disabled')) {
 									$("#btnAprobar").html('<i class="fas fa-vote-yea"></i> <strong>Aprobar a nivel quincenal</strong>');
 								}else{
+									$("#btnAprobar").attr('disabled', 'disabled');
 									$("#btnAprobar").html('<i class="fas fa-vote-yea"></i> <strong>Aprobar Evaluaciones</strong>');
 								}
 							}

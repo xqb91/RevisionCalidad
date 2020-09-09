@@ -39,8 +39,10 @@
 					$consulta = $consulta."FROM  ";
 					$consulta = $consulta."evaluacion_parcial a  ";
 					$consulta = $consulta."WHERE  ";
-					$consulta = $consulta."a.rut_evaluador = ".$rut_evaluador." ";
-					$consulta = $consulta."AND a.codigo_area = ".$area." ";
+					$consulta = $consulta."a.codigo_area = ".$area." ";
+					if($rut_evaluador != '*') {
+						$consulta = $consulta."AND a.rut_evaluador = ".$rut_evaluador." ";
+					}
 					$consulta = $consulta."AND a.periodo = '".$periodo."' ";
 					$consulta = $consulta."UNION ALL ";
 					$consulta = $consulta."SELECT  ";
@@ -48,8 +50,10 @@
 					$consulta = $consulta."FROM  ";
 					$consulta = $consulta."evaluacion_quincenal a  ";
 					$consulta = $consulta."WHERE  ";
-					$consulta = $consulta."a.rut_evaluador = ".$rut_evaluador." ";
-					$consulta = $consulta."AND a.codigo_area = ".$area." ";
+					$consulta = $consulta."a.codigo_area = ".$area." ";
+					if($rut_evaluador != '*') {
+						$consulta = $consulta."AND a.rut_evaluador = ".$rut_evaluador." ";
+					}
 					$consulta = $consulta."AND a.periodo = '".$periodo."' ";
 					$consulta = $consulta."UNION ALL ";
 					$consulta = $consulta."SELECT  ";
@@ -57,8 +61,10 @@
 					$consulta = $consulta."FROM  ";
 					$consulta = $consulta."evaluacion_final a  ";
 					$consulta = $consulta."WHERE  ";
-					$consulta = $consulta."a.rut_evaluador = ".$rut_evaluador." ";
-					$consulta = $consulta."AND a.codigo_area = ".$area." ";
+					$consulta = $consulta."a.codigo_area = ".$area." ";
+					if($rut_evaluador != '*') {
+						$consulta = $consulta."AND a.rut_evaluador = ".$rut_evaluador." ";
+					}
 					$consulta = $consulta."AND a.periodo = '".$periodo."' ";
 					$consulta = $consulta.")xx ";
 					$consulta = $consulta."INNER JOIN ejecutivo b ON xx.rut_ejecutivo = b.rut_ejecutivo ";
@@ -279,106 +285,245 @@
 		//edit this 
 		public function filtrarEvaluacionesSupervisor($periodo, $codigo_area, $rut_ejecutivo, $estado) {
 			try {
-				$consulta = "SELECT * FROM ( ";
-				$consulta = $consulta."SELECT ";
-				$consulta = $consulta."'quincenal' as entrega, ";
-				$consulta = $consulta."2 as tipo, ";
-				$consulta = $consulta."a.numero_quincenal as numero_evaluacion, ";
-				$consulta = $consulta."a.periodo, ";
-				$consulta = $consulta."a.codigo_area, ";
-				$consulta = $consulta."a.fecha_creacion as fecha_evaluacion, ";
-				$consulta = $consulta."a.rut_ejecutivo, ";
-				$consulta = $consulta."x.nombre_ejecutivo, ";
-				$consulta = $consulta."a.rut_evaluador, ";
-				$consulta = $consulta."y.nombre_evaluador, ";
-				$consulta = $consulta."cast(a.nota_quincenal as decimal(12,2)) as nota_final, ";
-				$consulta = $consulta."-1 as orden, ";
-				$consulta = $consulta."a.estado ";
-				$consulta = $consulta."FROM  ";
-				$consulta = $consulta."evaluacion_quincenal a  ";
-				$consulta = $consulta."INNER JOIN ejecutivo x ON a.rut_ejecutivo = x.rut_ejecutivo ";
-				$consulta = $consulta."INNER JOIN evaluador y ON a.rut_evaluador = y.rut_evaluador ";
-				$consulta = $consulta."WHERE  ";
-				$consulta = $consulta."periodo = '".$periodo."' ";
-				$consulta = $consulta."UNION ALL  ";
-				$consulta = $consulta."SELECT  ";
-				$consulta = $consulta."'quincenal' as entrega, ";
-				$consulta = $consulta."1 as tipo, ";
-				$consulta = $consulta."a.numero_evaluacion, ";
-				$consulta = $consulta."a.periodo, ";
-				$consulta = $consulta."a.codigo_area, ";
-				$consulta = $consulta."a.fecha_evaluacion, ";
-				$consulta = $consulta."a.rut_ejecutivo, ";
-				$consulta = $consulta."x.nombre_ejecutivo, ";
-				$consulta = $consulta."a.rut_evaluador, ";
-				$consulta = $consulta."y.nombre_evaluador, ";
-				$consulta = $consulta."a.nota_final, ";
-				$consulta = $consulta."a.orden, ";
-				$consulta = $consulta."a.estado ";
-				$consulta = $consulta."FROM  ";
-				$consulta = $consulta."evaluacion_parcial a  ";
-				$consulta = $consulta."INNER JOIN ejecutivo x ON a.rut_ejecutivo = x.rut_ejecutivo ";
-				$consulta = $consulta."INNER JOIN evaluador y ON a.rut_evaluador = y.rut_evaluador ";
-				$consulta = $consulta."WHERE  ";
-				$consulta = $consulta."a.numero_evaluacion in (SELECT numero_evaluacion FROM detalle_evaluacion_quincenal b WHERE b.numero_quincenal in ( SELECT numero_quincenal FROM evaluacion_quincenal WHERE periodo = '".$periodo."')) ";
-				$consulta = $consulta."UNION ALL  ";
-				$consulta = $consulta."SELECT  ";
-				$consulta = $consulta."'final' as entrega, ";
-				$consulta = $consulta."3 as tipo, ";
-				$consulta = $consulta."z.numero_final as numero_evaluacion, ";
-				$consulta = $consulta."z.periodo, ";
-				$consulta = $consulta."z.codigo_area, ";
-				$consulta = $consulta."z.fecha_creacion as fecha_evaluacion, ";
-				$consulta = $consulta."z.rut_ejecutivo, ";
-				$consulta = $consulta."x.nombre_ejecutivo, ";
-				$consulta = $consulta."z.rut_evaluador, ";
-				$consulta = $consulta."y.nombre_evaluador, ";
-				$consulta = $consulta."z.nota_final, ";
-				$consulta = $consulta."-1 as orden, ";
-				$consulta = $consulta."z.estado ";
-				$consulta = $consulta."FROM  ";
-				$consulta = $consulta."evaluacion_final z ";
-				$consulta = $consulta."INNER JOIN ejecutivo x ON z.rut_ejecutivo = x.rut_ejecutivo ";
-				$consulta = $consulta."INNER JOIN evaluador y ON z.rut_evaluador = y.rut_evaluador ";
-				$consulta = $consulta."WHERE  ";
-				$consulta = $consulta."periodo = '".$periodo."' ";
-				$consulta = $consulta."UNION ALL ";
-				$consulta = $consulta."SELECT  ";
-				$consulta = $consulta."'final' as entrega, ";
-				$consulta = $consulta."1 as tipo, ";
-				$consulta = $consulta."z.numero_evaluacion, ";
-				$consulta = $consulta."z.periodo, ";
-				$consulta = $consulta."z.codigo_area, ";
-				$consulta = $consulta."z.fecha_evaluacion, ";
-				$consulta = $consulta."z.rut_ejecutivo, ";
-				$consulta = $consulta."x.nombre_ejecutivo, ";
-				$consulta = $consulta."z.rut_evaluador, ";
-				$consulta = $consulta."y.nombre_evaluador, ";
-				$consulta = $consulta."z.nota_final, ";
-				$consulta = $consulta."z.orden, ";
-				$consulta = $consulta."z.estado ";
-				$consulta = $consulta."FROM  ";
-				$consulta = $consulta."evaluacion_parcial z  ";
-				$consulta = $consulta."INNER JOIN ejecutivo x ON z.rut_ejecutivo = x.rut_ejecutivo ";
-				$consulta = $consulta."INNER JOIN evaluador y ON z.rut_evaluador = y.rut_evaluador ";
-				$consulta = $consulta."WHERE  ";
-				$consulta = $consulta."z.numero_evaluacion in (SELECT numero_evaluacion FROM detalle_evaluacion_final WHERE numero_final IN (SELECT numero_final FROM evaluacion_final WHERE periodo = '".$periodo."') AND numero_evaluacion NOT IN (SELECT numero_evaluacion FROM detalle_evaluacion_quincenal b WHERE b.numero_quincenal in ( SELECT numero_quincenal  ";
-				$consulta = $consulta."FROM evaluacion_quincenal WHERE periodo = '".$periodo."')))   ";
-				$consulta = $consulta."ORDER BY `tipo` ASC ";
-				$consulta = $consulta.")xx  ";
-				$consulta = $consulta."WHERE codigo_area = ".$codigo_area."  ";
-				if($rut_ejecutivo != '*') {
-					$consulta = $consulta."AND rut_ejecutivo = ".$rut_ejecutivo."  ";
-				}
-				if($estado != '*') {
-					if($estado == 5) {
-						$consulta = $consulta."AND estado in (1,4,5)  ";	
-					}else{
-						$consulta = $consulta."AND estado = ".$estado."  ";	
+				if($codigo_area == 1) {
+					$consulta = "SELECT * FROM ( ";
+					$consulta = $consulta."SELECT ";
+					$consulta = $consulta."'quincenal' as entrega, ";
+					$consulta = $consulta."2 as tipo, ";
+					$consulta = $consulta."a.numero_quincenal as numero_evaluacion, ";
+					$consulta = $consulta."a.periodo, ";
+					$consulta = $consulta."a.codigo_area, ";
+					$consulta = $consulta."a.fecha_creacion as fecha_evaluacion, ";
+					$consulta = $consulta."a.rut_ejecutivo, ";
+					$consulta = $consulta."x.nombre_ejecutivo, ";
+					$consulta = $consulta."a.rut_evaluador, ";
+					$consulta = $consulta."y.nombre_evaluador, ";
+					$consulta = $consulta."cast(a.nota_quincenal as decimal(12,2)) as nota_final, ";
+					$consulta = $consulta."-1 as orden, ";
+					$consulta = $consulta."a.estado ";
+					$consulta = $consulta."FROM  ";
+					$consulta = $consulta."evaluacion_quincenal a  ";
+					$consulta = $consulta."INNER JOIN ejecutivo x ON a.rut_ejecutivo = x.rut_ejecutivo ";
+					$consulta = $consulta."INNER JOIN evaluador y ON a.rut_evaluador = y.rut_evaluador ";
+					$consulta = $consulta."WHERE  ";
+					$consulta = $consulta."periodo = '".$periodo."' ";
+					$consulta = $consulta."UNION ALL  ";
+					$consulta = $consulta."SELECT  ";
+					$consulta = $consulta."'quincenal' as entrega, ";
+					$consulta = $consulta."1 as tipo, ";
+					$consulta = $consulta."a.numero_evaluacion, ";
+					$consulta = $consulta."a.periodo, ";
+					$consulta = $consulta."a.codigo_area, ";
+					$consulta = $consulta."a.fecha_evaluacion, ";
+					$consulta = $consulta."a.rut_ejecutivo, ";
+					$consulta = $consulta."x.nombre_ejecutivo, ";
+					$consulta = $consulta."a.rut_evaluador, ";
+					$consulta = $consulta."y.nombre_evaluador, ";
+					$consulta = $consulta."a.nota_final, ";
+					$consulta = $consulta."a.orden, ";
+					$consulta = $consulta."a.estado ";
+					$consulta = $consulta."FROM  ";
+					$consulta = $consulta."evaluacion_parcial a  ";
+					$consulta = $consulta."INNER JOIN ejecutivo x ON a.rut_ejecutivo = x.rut_ejecutivo ";
+					$consulta = $consulta."INNER JOIN evaluador y ON a.rut_evaluador = y.rut_evaluador ";
+					$consulta = $consulta."WHERE  ";
+					$consulta = $consulta."a.numero_evaluacion in (SELECT numero_evaluacion FROM detalle_evaluacion_quincenal b WHERE b.numero_quincenal in ( SELECT numero_quincenal FROM evaluacion_quincenal WHERE periodo = '".$periodo."')) ";
+					$consulta = $consulta."UNION ALL  ";
+					$consulta = $consulta."SELECT  ";
+					$consulta = $consulta."'final' as entrega, ";
+					$consulta = $consulta."3 as tipo, ";
+					$consulta = $consulta."z.numero_final as numero_evaluacion, ";
+					$consulta = $consulta."z.periodo, ";
+					$consulta = $consulta."z.codigo_area, ";
+					$consulta = $consulta."z.fecha_creacion as fecha_evaluacion, ";
+					$consulta = $consulta."z.rut_ejecutivo, ";
+					$consulta = $consulta."x.nombre_ejecutivo, ";
+					$consulta = $consulta."z.rut_evaluador, ";
+					$consulta = $consulta."y.nombre_evaluador, ";
+					$consulta = $consulta."z.nota_final, ";
+					$consulta = $consulta."-1 as orden, ";
+					$consulta = $consulta."z.estado ";
+					$consulta = $consulta."FROM  ";
+					$consulta = $consulta."evaluacion_final z ";
+					$consulta = $consulta."INNER JOIN ejecutivo x ON z.rut_ejecutivo = x.rut_ejecutivo ";
+					$consulta = $consulta."INNER JOIN evaluador y ON z.rut_evaluador = y.rut_evaluador ";
+					$consulta = $consulta."WHERE  ";
+					$consulta = $consulta."periodo = '".$periodo."' ";
+					$consulta = $consulta."UNION ALL ";
+					$consulta = $consulta."SELECT  ";
+					$consulta = $consulta."'final' as entrega, ";
+					$consulta = $consulta."1 as tipo, ";
+					$consulta = $consulta."z.numero_evaluacion, ";
+					$consulta = $consulta."z.periodo, ";
+					$consulta = $consulta."z.codigo_area, ";
+					$consulta = $consulta."z.fecha_evaluacion, ";
+					$consulta = $consulta."z.rut_ejecutivo, ";
+					$consulta = $consulta."x.nombre_ejecutivo, ";
+					$consulta = $consulta."z.rut_evaluador, ";
+					$consulta = $consulta."y.nombre_evaluador, ";
+					$consulta = $consulta."z.nota_final, ";
+					$consulta = $consulta."z.orden, ";
+					$consulta = $consulta."z.estado ";
+					$consulta = $consulta."FROM  ";
+					$consulta = $consulta."evaluacion_parcial z  ";
+					$consulta = $consulta."INNER JOIN ejecutivo x ON z.rut_ejecutivo = x.rut_ejecutivo ";
+					$consulta = $consulta."INNER JOIN evaluador y ON z.rut_evaluador = y.rut_evaluador ";
+					$consulta = $consulta."WHERE  ";
+					$consulta = $consulta."z.numero_evaluacion in (SELECT numero_evaluacion FROM detalle_evaluacion_final WHERE numero_final IN (SELECT numero_final FROM evaluacion_final WHERE periodo = '".$periodo."') AND numero_evaluacion NOT IN (SELECT numero_evaluacion FROM detalle_evaluacion_quincenal b WHERE b.numero_quincenal in ( SELECT numero_quincenal  ";
+					$consulta = $consulta."FROM evaluacion_quincenal WHERE periodo = '".$periodo."')))   ";
+					$consulta = $consulta."ORDER BY `tipo` ASC ";
+					$consulta = $consulta.")xx  ";
+					$consulta = $consulta."WHERE codigo_area = ".$codigo_area."  ";
+					if($rut_ejecutivo != '*') {
+						$consulta = $consulta."AND rut_ejecutivo = ".$rut_ejecutivo."  ";
 					}
-					
+					if($estado != '*') {
+						if($estado == 5) {
+							$consulta = $consulta."AND estado in (1,4,5)  ";	
+						}else{
+							$consulta = $consulta."AND estado = ".$estado."  ";	
+						}
+					}
+					$consulta = $consulta."ORDER BY nombre_ejecutivo ASC, orden ASC ";
+				}else{
+					$consulta = "SELECT * FROM ( ";
+					$consulta = $consulta."SELECT  ";
+					$consulta = $consulta."'quincenal' as entrega, ";
+					$consulta = $consulta."2 as tipo, ";
+					$consulta = $consulta."a.numero_quincenal as numero_evaluacion, ";
+					$consulta = $consulta."a.periodo, ";
+					$consulta = $consulta."a.codigo_area, ";
+					$consulta = $consulta."a.fecha_creacion as fecha_evaluacion, ";
+					$consulta = $consulta."a.rut_ejecutivo, ";
+					$consulta = $consulta."x.nombre_ejecutivo, ";
+					$consulta = $consulta."a.rut_evaluador, ";
+					$consulta = $consulta."y.nombre_evaluador, ";
+					$consulta = $consulta."cast(a.nota_quincenal as decimal(12, 2)) as nota_final, ";
+					$consulta = $consulta."-1 as orden, ";
+					$consulta = $consulta."a.estado  ";
+					$consulta = $consulta."FROM  ";
+					$consulta = $consulta."evaluacion_quincenal a  ";
+					$consulta = $consulta."INNER JOIN ejecutivo x ON a.rut_ejecutivo = x.rut_ejecutivo  ";
+					$consulta = $consulta."INNER JOIN evaluador y ON a.rut_evaluador = y.rut_evaluador  ";
+					$consulta = $consulta."WHERE ";
+					$consulta = $consulta."periodo = '".$periodo."'  ";
+					$consulta = $consulta."AND a.codigo_area = ".$codigo_area." ";
+					if($rut_ejecutivo != '*') {
+						$consulta = $consulta."AND a.rut_ejecutivo = ".$rut_ejecutivo." ";
+					}
+					$consulta = $consulta."UNION ALL  ";
+					$consulta = $consulta."SELECT  ";
+					$consulta = $consulta."'quincenal' as entrega, ";
+					$consulta = $consulta."1 as tipo, ";
+					$consulta = $consulta."a.numero_evaluacion, ";
+					$consulta = $consulta."a.periodo, ";
+					$consulta = $consulta."a.codigo_area, ";
+					$consulta = $consulta."a.fecha_evaluacion, ";
+					$consulta = $consulta."a.rut_ejecutivo, ";
+					$consulta = $consulta."x.nombre_ejecutivo, ";
+					$consulta = $consulta."a.rut_evaluador, ";
+					$consulta = $consulta."y.nombre_evaluador, ";
+					$consulta = $consulta."a.nota_final, ";
+					$consulta = $consulta."a.orden, ";
+					$consulta = $consulta."a.estado  ";
+					$consulta = $consulta."FROM  ";
+					$consulta = $consulta."evaluacion_parcial a  ";
+					$consulta = $consulta."INNER JOIN ejecutivo x ON a.rut_ejecutivo = x.rut_ejecutivo  ";
+					$consulta = $consulta."INNER JOIN evaluador y ON a.rut_evaluador = y.rut_evaluador  ";
+					$consulta = $consulta."WHERE  ";
+					$consulta = $consulta."a.numero_evaluacion in (SELECT numero_evaluacion FROM detalle_evaluacion_quincenal b WHERE b.numero_quincenal in ( SELECT numero_quincenal FROM evaluacion_quincenal WHERE periodo = '".$periodo."'))  ";
+					if($rut_ejecutivo != '*') {
+						$consulta = $consulta."AND a.rut_ejecutivo = ".$rut_ejecutivo." ";
+					}
+					$consulta = $consulta."UNION ALL  ";
+					$consulta = $consulta."SELECT  ";
+					$consulta = $consulta."'final' as entrega, ";
+					$consulta = $consulta."1 as tipo, ";
+					$consulta = $consulta."z.numero_evaluacion, ";
+					$consulta = $consulta."z.periodo, ";
+					$consulta = $consulta."z.codigo_area, ";
+					$consulta = $consulta."z.fecha_evaluacion, ";
+					$consulta = $consulta."z.rut_ejecutivo, ";
+					$consulta = $consulta."x.nombre_ejecutivo, ";
+					$consulta = $consulta."z.rut_evaluador, ";
+					$consulta = $consulta."y.nombre_evaluador, ";
+					$consulta = $consulta."z.nota_final, ";
+					$consulta = $consulta."z.orden, ";
+					$consulta = $consulta."z.estado  ";
+					$consulta = $consulta."FROM  ";
+					$consulta = $consulta."evaluacion_parcial z  ";
+					$consulta = $consulta."INNER JOIN ejecutivo x ON z.rut_ejecutivo = x.rut_ejecutivo  ";
+					$consulta = $consulta."INNER JOIN evaluador y ON z.rut_evaluador = y.rut_evaluador  ";
+					$consulta = $consulta."WHERE  ";
+					$consulta = $consulta."z.numero_evaluacion in (SELECT numero_evaluacion FROM detalle_evaluacion_final WHERE numero_final IN (SELECT numero_final FROM evaluacion_final WHERE periodo = '".$periodo."' AND codigo_area = ".$codigo_area." ) AND numero_evaluacion NOT IN (SELECT numero_evaluacion FROM detalle_evaluacion_quincenal b WHERE b.numero_quincenal in ( SELECT numero_quincenal FROM evaluacion_quincenal WHERE periodo = '".$periodo."' AND codigo_area = ".$codigo_area." )))  ";
+					$consulta = $consulta."AND z.codigo_area = ".$codigo_area."  ";
+					if($rut_ejecutivo != '*') {
+						$consulta = $consulta."AND z.rut_ejecutivo = ".$rut_ejecutivo." ";
+					}
+					$consulta = $consulta."UNION ALL  ";
+					$consulta = $consulta."SELECT  ";
+					$consulta = $consulta."'final' as entrega, ";
+					$consulta = $consulta."3 as tipo, ";
+					$consulta = $consulta."z.numero_final as numero_evaluacion, ";
+					$consulta = $consulta."z.periodo, ";
+					$consulta = $consulta."z.codigo_area, ";
+					$consulta = $consulta."z.fecha_creacion as fecha_evaluacion, ";
+					$consulta = $consulta."z.rut_ejecutivo, ";
+					$consulta = $consulta."x.nombre_ejecutivo, ";
+					$consulta = $consulta."z.rut_evaluador, ";
+					$consulta = $consulta."y.nombre_evaluador, ";
+					$consulta = $consulta."z.nota_final, ";
+					$consulta = $consulta."-1 as orden, ";
+					$consulta = $consulta."z.estado  ";
+					$consulta = $consulta."FROM  ";
+					$consulta = $consulta."evaluacion_final z  ";
+					$consulta = $consulta."INNER JOIN ejecutivo x ON z.rut_ejecutivo = x.rut_ejecutivo  ";
+					$consulta = $consulta."INNER JOIN evaluador y ON z.rut_evaluador = y.rut_evaluador  ";
+					$consulta = $consulta."WHERE  ";
+					$consulta = $consulta."periodo = '".$periodo."'  ";
+					$consulta = $consulta."AND z.codigo_area = ".$codigo_area." ";
+					if($rut_ejecutivo != '*') {
+						$consulta = $consulta."AND z.rut_ejecutivo = ".$rut_ejecutivo." ";
+					}
+					$consulta = $consulta."UNION ALL ";
+					$consulta = $consulta."SELECT  ";
+					$consulta = $consulta."'--' as entrega, ";
+					$consulta = $consulta."1 as tipo, ";
+					$consulta = $consulta."a.numero_evaluacion, ";
+					$consulta = $consulta."a.periodo, ";
+					$consulta = $consulta."a.codigo_area, ";
+					$consulta = $consulta."a.fecha_evaluacion, ";
+					$consulta = $consulta."a.rut_ejecutivo, ";
+					$consulta = $consulta."x.nombre_ejecutivo, ";
+					$consulta = $consulta."a.rut_evaluador, ";
+					$consulta = $consulta."y.nombre_evaluador, ";
+					$consulta = $consulta."a.nota_final, ";
+					$consulta = $consulta."a.orden, ";
+					$consulta = $consulta."a.estado  ";
+					$consulta = $consulta."FROM  ";
+					$consulta = $consulta."evaluacion_parcial a  ";
+					$consulta = $consulta."INNER JOIN ejecutivo x ON a.rut_ejecutivo = x.rut_ejecutivo  ";
+					$consulta = $consulta."INNER JOIN evaluador y ON a.rut_evaluador = y.rut_evaluador  ";
+					$consulta = $consulta."WHERE  ";
+					$consulta = $consulta."a.periodo = '".$periodo."' ";
+					$consulta = $consulta."AND a.codigo_area = ".$codigo_area." ";
+					if($rut_ejecutivo != '*') {
+						$consulta = $consulta."AND a.rut_ejecutivo = ".$rut_ejecutivo." ";
+					}
+					$consulta = $consulta."AND a.numero_evaluacion not in (SELECT b.numero_evaluacion FROM evaluacion_quincenal a INNER JOIN detalle_evaluacion_quincenal b ON a.numero_quincenal = b.numero_quincenal WHERE periodo = '".$periodo."' AND codigo_area = ".$codigo_area.") ";
+					$consulta = $consulta."AND a.numero_evaluacion not in (SELECT b.numero_evaluacion FROM evaluacion_final a INNER JOIN detalle_evaluacion_final b ON a.numero_final = b.numero_final WHERE periodo = '".$periodo."' AND codigo_area = ".$codigo_area.") ";
+					$consulta = $consulta.")xx WHERE codigo_area = ".$codigo_area."  ";
+					if($estado != '*') {
+						if($estado == 5) {
+							$consulta = $consulta."AND estado in (1,4,5)  ";	
+						}else{
+							$consulta = $consulta."AND estado = ".$estado."  ";	
+						}
+					}
+					$consulta = $consulta."ORDER BY  ";
+					$consulta = $consulta."nombre_ejecutivo ASC, ";
+					$consulta = $consulta."orden ASC ";
 				}
-				$consulta = $consulta."ORDER BY nombre_ejecutivo ASC, orden ASC ";
 				//ejecutando la consulta
 				//echo $consulta;
 				if($this->databaseTransaction != null) {

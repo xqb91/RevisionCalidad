@@ -65,7 +65,6 @@
 						$periodo 	= filter_input(INPUT_POST, ("periodo"));
 						$ejecutivo  = filter_input(INPUT_POST, ("ejecutivo"));
 						$estado     = filter_input(INPUT_POST, ("estado"));
-
 						$ejecutivos = $e->filtrarEvaluacionesSupervisor($periodo, $area, $ejecutivo, $estado);
 						if($ejecutivos == null) {
 							http_response_code(301);
