@@ -1,12 +1,13 @@
 <?php
+	include("../model/Evaluador.php");
 	include("../config/Globales.php");
 	include("../config/basicos.php");
 	include(dirController."CustomController.php");
-	
-	sleep(1);
+	$usuario 	=	$_SESSION['loginUser'];
+
 	try {
 		$c = new CustomController();
-		$v = $c->evaluacionesNotificadasSupervisor();
+		$v = $c->evaluacionesNotificadasSupervisor($usuario->getarea());
 		if($v == null) {
 			http_response_code(401);
 		}else{

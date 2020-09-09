@@ -2,7 +2,7 @@
   include("config/Globales.php");
   //error_reporting(0);
   session_start();
-  $_SESSION['rauliUser'] = 'avatar';
+  $_SESSION['rauliUser'] = 'ntoro';
   //---- NO OLVIDAR SETEAR ESTA VARIABLE DE SESION CUANDO INICIE EN EL SISTEMA VIEJO!!!!!!!!!
   $_SESSION['lastActivity'] = date('Y-m-d H:i:s');
 

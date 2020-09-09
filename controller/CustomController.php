@@ -797,25 +797,34 @@
 			}
 		}
 
-		public function evaluacionesNotificadasSupervisor() {
+		public function evaluacionesNotificadasSupervisor($param) {
 			try {
 				$consulta = "SELECT 1 as tipo, a.numero_evaluacion as evaluacion, date_format(a.fecha_evaluacion, '%d-%m-%y') as fecha, a.periodo, a.rut_ejecutivo, b.nombre_ejecutivo ";
 				$consulta = $consulta."FROM "; 
 				$consulta = $consulta."evaluacion_parcial a  ";
 				$consulta = $consulta."INNER JOIN ejecutivo b ON a.rut_ejecutivo = b.rut_ejecutivo ";
 				$consulta = $consulta."WHERE a.estado = 8 ";
+				if($param != 0) {
+					$consulta = $consulta."AND a.codigo_area = ".$param." ";
+				}
 				$consulta = $consulta."UNION ALL ";
 				$consulta = $consulta."SELECT 2 as tipo, a.numero_quincenal as evaluacion, date_format(a.fecha_creacion, '%d-%m-%y') as fecha, a.periodo, a.rut_ejecutivo, b.nombre_ejecutivo ";
 				$consulta = $consulta."FROM  ";
 				$consulta = $consulta."evaluacion_quincenal a  ";
 				$consulta = $consulta."INNER JOIN ejecutivo b ON a.rut_ejecutivo = b.rut_ejecutivo ";
 				$consulta = $consulta."WHERE a.estado = 8 ";
+				if($param != 0) {
+					$consulta = $consulta."AND a.codigo_area = ".$param." ";
+				}
 				$consulta = $consulta."UNION ALL ";
 				$consulta = $consulta."SELECT 3 as tipo, a.numero_final as evaluacion, date_format(a.fecha_creacion, '%d-%m-%y') as fecha, a.periodo, a.rut_ejecutivo, b.nombre_ejecutivo ";
 				$consulta = $consulta."FROM  ";
 				$consulta = $consulta."evaluacion_final a  ";
 				$consulta = $consulta."INNER JOIN ejecutivo b ON a.rut_ejecutivo = b.rut_ejecutivo ";
 				$consulta = $consulta."WHERE a.estado = 8 ";
+				if($param != 0) {
+					$consulta = $consulta."AND a.codigo_area = ".$param." ";
+				}
 				//ejecutando la consulta
 				if($this->databaseTransaction != null) {
 					$resultado = $this->databaseTransaction->ejecutar($consulta);

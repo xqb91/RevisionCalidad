@@ -116,13 +116,9 @@
 
 		public function getArea() {
 			try {
-				if($this->area == 1) {
-					return true;
-				}else{
-					return false;
-				}
+				return $this->area;
 			}catch(Exception $e) {
-				return false;
+				return null;
 			}
 		}
 
